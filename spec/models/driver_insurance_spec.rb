@@ -16,10 +16,11 @@ RSpec.describe DriverInsurance, type: :model do
   end
 
   it "calculates the price for a driver insurance policy" do
-    vehicle = Vehicle.create(driver_insurance_daily_rate_pounds: 58.50)
-    driver_insurance = DriverInsurance.create(start_date: Date.today, end_date: Date.today + 1.week,
+    daysDiff = 7
+    vehicle1 = Vehicle.create(driver_insurance_daily_rate_pounds: 58.50)
+    driver_insurance = DriverInsurance.create(start_date: Date.today, end_date: Date.today + daysDiff.days,
                                               vehicle: vehicle)
-    expect(Partner.driver_insurance_p(driver_insurance)).to eq 7 * 58.50
+    expect(Partner.driver_insurance_p(driver_insurance)).to eq daysDiff * vehicle.driver_insurance_daily_rate_pounds
   end
 
   it "calculates the price for all the insurance for one driver"
