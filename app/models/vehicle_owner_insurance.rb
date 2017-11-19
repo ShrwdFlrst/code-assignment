@@ -13,10 +13,15 @@ class VehicleOwnerInsurance < ActiveRecord::Base
   end
 
   def total_days_charged_for
-    # total_days_covered - vehicle.driver_insurances.map{|driver_insurance| driver_insurance.numds}.sum
-    # Does not seem to work!!
+    date_range = (start_date..end_date).to_a
+    days_not_overlapping = date_range.length
+    
+    vehicle.driver_insurances.each do |driver_insurance|
+      overlap = date_range & (driver_insurance.start_date..end_date).to_a
+      days_not_overlapping = days_not_overlapping - overlap.length
+    end
 
-    return 4
+    return [days_not_overlapping, 0].max
   end
 
   def total_charge_pounds

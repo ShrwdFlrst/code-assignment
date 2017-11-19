@@ -8,11 +8,13 @@ RSpec.describe VehicleOwnerInsurance, type: :model do
   end
 
   it "calculates the total charge for a vehicle owner insurance (excludes any day charged for on the driver insurance for that vehicle)" do
-    vehicle = Vehicle.create(vehicle_owner_insurance_daily_rate_pounds: 1.1 )
+    daily_rate = 1.5
+    days_not_overlapping = 4
+    vehicle = Vehicle.create(vehicle_owner_insurance_daily_rate_pounds: daily_rate )
     vehicle_owner_insurance = VehicleOwnerInsurance.create(start_date: Date.today, end_date: Date.today + 7.days, vehicle: vehicle)
     driver_insurance = DriverInsurance.create(start_date: Date.today + 4.days, end_date: Date.today + 11.days, vehicle: vehicle)
 
-    expect(vehicle_owner_insurance.total_charge_pounds).to eq 4.4
+    expect(vehicle_owner_insurance.total_charge_pounds).to eq days_not_overlapping * daily_rate
   end
 
   it "calculates the total charges for the owner using the version2 calculations" do
