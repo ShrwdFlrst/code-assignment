@@ -6,7 +6,12 @@ class Partner < ActiveRecord::Base
   has_many :owned_vehicles, class_name: "Vehicle", foreign_key: "owner_id"
 
   def total_days_charged_for_all_driver_insurance_policies
+    days = 0
+    self.driver_insurances.each do |driver_insurance|
+      days = days + (driver_insurance.end_date - driver_insurance.start_date).to_i
+    end
 
+    return days
   end
 
   def self.driver_insurance_p(driver_insurance)
