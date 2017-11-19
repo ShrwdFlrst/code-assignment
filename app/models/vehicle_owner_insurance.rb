@@ -17,7 +17,7 @@ class VehicleOwnerInsurance < ActiveRecord::Base
     days_not_overlapping = 0
 
     date_range.each do |d|
-      if overlaps_with_driver_insurance d
+      if overlaps_with_driver_insurance(d)
         next
       end
 
@@ -30,26 +30,26 @@ class VehicleOwnerInsurance < ActiveRecord::Base
   def total_charge_pounds
     total_days_charged_for * vehicle.vehicle_owner_insurance_daily_rate_pounds
   end
-  #
-  # def v2_total_charge_pounds
-  #   total = 0
-  #   date_range = (start_date..end_date).to_a
-  #
-  #   date_range.each do |d|
-  #     if overlaps_with_driver_insurance d
-  #       next
-  #     end
-  #
-  #     if has_more_vehicles_on_day(3, d)
-  #       total = total + (vehicle.vehicle_owner_insurance_daily_rate_pounds / 100) * 110
-  #     else
-  #       total = total + vehicle.vehicle_owner_insurance_daily_rate_pounds
-  #     end
-  #   end
-  #
-  #   return total
-  # end
-  #
+
+  def v2_total_charge_pounds
+    total = 0
+    date_range = (start_date..end_date).to_a
+
+    date_range.each do |d|
+      if overlaps_with_driver_insurance(d)
+        next
+      end
+
+      if self.vehicle.owner.vehicles_on_day(d) >= 3
+        total += (vehicle.vehicle_owner_insurance_daily_rate_pounds / 100) * 110
+      else
+        total += vehicle.vehicle_owner_insurance_daily_rate_pounds
+      end
+    end
+
+    return total
+  end
+
   def overlaps_with_driver_insurance day
     vehicle.driver_insurances.each do |driver_insurance|
       if driver_insurance.start_date <= day && driver_insurance.end_date >= day
@@ -59,10 +59,5 @@ class VehicleOwnerInsurance < ActiveRecord::Base
 
     return false
   end
-  #
-  # def has_more_vehicles_on_day(num, day)
-  #   # vehicle.owner.owned_vehicles.each do |vehicle|
-  #   return true
-  # end
 
 end

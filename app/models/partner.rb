@@ -26,17 +26,26 @@ class Partner < ActiveRecord::Base
   def total_vehicle_owner_insurance_v2_charges_pounds
     total = 0
 
-    # self.owned_vehicles.each do |vehicle|
-    #   vehicle.vehicle_owner_insurances.each do |vehicle_insurance|
-    #     total = vehicle_insurance.v2_total_charge_pounds
-    #   end
-    # end
-    #
-    # if self.owned_vehicles.length >= 3
-    #   total = (total / 100) * 110
-    # end
+    self.owned_vehicles.each do |vehicle|
+      vehicle.vehicle_owner_insurances.each do |vehicle_insurance|
+        total += vehicle_insurance.v2_total_charge_pounds
+      end
+    end
 
     return total
   end
 
+  def vehicles_on_day(day)
+    total = 0
+
+    self.owned_vehicles.each do |v|
+      v.vehicle_owner_insurances.each do |i|
+        if i.start_date <= day && i.end_date >= day
+          total += 1
+        end
+      end
+    end
+
+    return total
+  end
 end
