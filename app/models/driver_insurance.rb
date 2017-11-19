@@ -8,13 +8,17 @@
 # however you can assume that they will not overlap further than this.
 
 class DriverInsurance < ActiveRecord::Base
-
+  DEFAULT_DAILY_RATE = 58.50
   belongs_to :driver, class_name:  "Partner"
   belongs_to :vehicle
 
   def numds
     number_of_hours = (end_date - start_date).to_f * 24
     return number_of_hours / 24 # convert to days
+  end
+
+  def total_price
+    (self.end_date - self.start_date).to_f * self.vehicle.driver_insurance_daily_rate_pounds
   end
 
 end
