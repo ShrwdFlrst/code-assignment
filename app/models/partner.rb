@@ -14,10 +14,10 @@ class Partner < ActiveRecord::Base
     return days
   end
 
-  def total_driver_insurance_charge
+  def total_driver_insurance_charge_pounds
     total = 0
     self.driver_insurances.each do |driver_insurance|
-      total = total + driver_insurance.total_price
+      total = total + driver_insurance.total_charge_pounds
     end
 
     return total

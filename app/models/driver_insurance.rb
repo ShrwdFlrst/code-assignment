@@ -16,7 +16,7 @@ class DriverInsurance < ActiveRecord::Base
     return number_of_hours / 24 # convert to days
   end
 
-  def total_price
+  def total_charge_pounds
     self.numds * self.vehicle.driver_insurance_daily_rate_pounds
   end
 

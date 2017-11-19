@@ -20,7 +20,7 @@ RSpec.describe DriverInsurance, type: :model do
     vehicle = Vehicle.create(driver_insurance_daily_rate_pounds: 58.50)
     driver_insurance = DriverInsurance.create(start_date: Date.today, end_date: Date.today + daysDiff.days,
                                               vehicle: vehicle)
-    expect(driver_insurance.total_price).to eq daysDiff * vehicle.driver_insurance_daily_rate_pounds
+    expect(driver_insurance.total_charge_pounds).to eq daysDiff * vehicle.driver_insurance_daily_rate_pounds
   end
 
   it "calculates the price for all the insurance for one driver" do
@@ -31,9 +31,9 @@ RSpec.describe DriverInsurance, type: :model do
     vehicle2 = Vehicle.create(driver_insurance_daily_rate_pounds: 34.75)
     driver_insurance2 = DriverInsurance.create(start_date: Date.today + 1.week, end_date: Date.today + 2.week,
                                               vehicle: vehicle2, driver: driver)
-    expected_total = driver_insurance1.total_price + driver_insurance2.total_price
+    expected_total = driver_insurance1.total_charge_pounds + driver_insurance2.total_charge_pounds
 
-    expect(driver.total_driver_insurance_charge).to eq expected_total
+    expect(driver.total_driver_insurance_charge_pounds).to eq expected_total
   end
 
 end
